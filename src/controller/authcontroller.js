@@ -3,6 +3,7 @@ import Auth from "../models/authModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+// To see all the register users
 export async function getAllUser(req, res) {
   try {
     const users = await Auth.find();
@@ -13,6 +14,7 @@ export async function getAllUser(req, res) {
   }
 }
 
+// For registering the users & to check if the users already exists or not
 export async function userRegister(req, res) {
   const { name, email, password } = req.body;
 
@@ -30,6 +32,7 @@ export async function userRegister(req, res) {
   res.status(201).json({ message: "User registered successfully." });
 }
 
+// For logging in by checking the hashed password(previous password) and plain password (currently entered password)
 export async function userlogin(req, res) {
   const { email, password } = req.body;
 
@@ -53,6 +56,7 @@ export async function userlogin(req, res) {
   res.status(200).json({ message: "Login successful", token });
 }
 
+// To authorized the users
 export async function userProfile(req, res) {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ message: "Token missing" });

@@ -8,6 +8,8 @@ import {
 
 const route = express.Router();
 
+// routes for each methods
+
 route.get("/", getAllUser);
 route.post("/register", userRegister);
 route.post("/login", userlogin);

@@ -2,6 +2,7 @@ import express from "express";
 import Auth from "../models/authModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { addToBlacklist, isBlacklisted } from "../token/tokenBlacklist.js";
 
 // To see all the register users
 export async function getAllUser(req, res) {
@@ -62,6 +63,12 @@ export async function userProfile(req, res) {
   if (!authHeader) return res.status(401).json({ message: "Token missing" });
 
   const token = authHeader.split(" ")[1];
+
+  // Check if token is blacklisted
+  if (isBlacklisted(token)) {
+    return res.status(401).json({ message: "Token has been revoked" });
+  }
+
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await Auth.findById(decoded.id).select("-password");
@@ -71,4 +78,14 @@ export async function userProfile(req, res) {
   } catch {
     res.status(401).json({ message: "Invalid token" });
   }
+}
+
+export async function userLogout(req, res) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return res.status(400).json({ message: "Token missing" });
+
+  const token = authHeader.split(" ")[1];
+  addToBlacklist(token); // blacklist it
+
+  res.status(200).json({ message: "Logged out successfully" });
 }

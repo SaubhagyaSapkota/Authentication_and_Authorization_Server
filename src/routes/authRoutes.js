@@ -4,6 +4,7 @@ import {
   userRegister,
   userlogin,
   userProfile,
+  userLogout,
 } from "../controller/authcontroller.js";
 
 const route = express.Router();
@@ -14,5 +15,6 @@ route.get("/", getAllUser);
 route.post("/register", userRegister);
 route.post("/login", userlogin);
 route.post("/profile", userProfile);
+route.post("/logout", userLogout);
 
 export default route;

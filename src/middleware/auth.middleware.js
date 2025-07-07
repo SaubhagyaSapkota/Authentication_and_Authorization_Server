@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import { isBlacklisted } from "../token/tokenBlacklist.js";
-import Auth from "../models/authModel.js";
 
 export async function authenticate(req, res, next) {
   const authHeader = req.headers.authorization;

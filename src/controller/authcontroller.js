@@ -1,8 +1,9 @@
 import express from "express";
-import Auth from "../models/authModel.js";
+import { Auth, authSchemaZod } from "../models/authModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { addToBlacklist, isBlacklisted } from "../token/tokenBlacklist.js";
+import { error } from "console";
 
 // To see all the register users
 export async function getAllUser(req, res) {
@@ -19,8 +20,15 @@ export async function getAllUser(req, res) {
 export async function userRegister(req, res) {
   const { name, email, password } = req.body;
 
-  if (!(name && email && password)) {
-    return res.status(400).json({ message: "All fields are required." });
+  const validationResult = authSchemaZod.safeParse({ name, email, password });
+
+  if (!validationResult.success) {
+    const errorMessage = validationResult.error.errors.map(
+      (err) => err.message
+    );
+    return res
+      .status(400)
+      .json({ message: "Registration failed", error: errorMessage });
   }
 
   const existingUser = await Auth.findOne({ email });
@@ -74,8 +82,8 @@ export async function userLogout(req, res) {
 
 export async function removeUser(req, res) {
   try {
-    const { name, email, password } = req.body;
-    const deleteuser = await Auth.findOneAndDelete({name});
+    const { _id } = req.body;
+    const deleteuser = await Auth.findByIdAndDelete({ _id });
     if (!deleteuser) {
       return res.status(404).json({ message: "User not found" });
     }

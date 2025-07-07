@@ -6,6 +6,7 @@ import {
   userProfile,
   userLogout,
 } from "../controller/authcontroller.js";
+import { authenticate } from "../middleware/auth.middleware.js";
 
 const route = express.Router();
 
@@ -14,7 +15,7 @@ const route = express.Router();
 route.get("/", getAllUser);
 route.post("/register", userRegister);
 route.post("/login", userlogin);
-route.post("/profile", userProfile);
-route.post("/logout", userLogout);
+route.post("/profile", authenticate, userProfile);
+route.post("/logout", authenticate, userLogout);
 
 export default route;

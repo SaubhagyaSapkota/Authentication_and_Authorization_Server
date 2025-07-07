@@ -59,25 +59,7 @@ export async function userlogin(req, res) {
 
 // To authorized the users
 export async function userProfile(req, res) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) return res.status(401).json({ message: "Token missing" });
-
-  const token = authHeader.split(" ")[1];
-
-  // Check if token is blacklisted
-  if (isBlacklisted(token)) {
-    return res.status(401).json({ message: "Token has been revoked" });
-  }
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await Auth.findById(decoded.id).select("-password");
-    if (!user) throw new Error();
-
-    res.json(user);
-  } catch {
-    res.status(401).json({ message: "Invalid token" });
-  }
+  res.json(req.user);
 }
 
 export async function userLogout(req, res) {

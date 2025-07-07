@@ -5,6 +5,7 @@ import {
   userlogin,
   userProfile,
   userLogout,
+  removeUser
 } from "../controller/authcontroller.js";
 import { authenticate } from "../middleware/auth.middleware.js";
 
@@ -17,5 +18,6 @@ route.post("/register", userRegister);
 route.post("/login", userlogin);
 route.post("/profile", authenticate, userProfile);
 route.post("/logout", authenticate, userLogout);
+route.delete("/remove", removeUser)
 
 export default route;

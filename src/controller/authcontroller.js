@@ -71,3 +71,17 @@ export async function userLogout(req, res) {
 
   res.status(200).json({ message: "Logged out successfully" });
 }
+
+export async function removeUser(req, res) {
+  try {
+    const { name, email, password } = req.body;
+    const deleteuser = await Auth.findOneAndDelete({name});
+    if (!deleteuser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: "User has been deleted" });
+  } catch (error) {
+    console.error("Error in removeUser controller", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}

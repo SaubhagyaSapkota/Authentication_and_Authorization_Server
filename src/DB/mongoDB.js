@@ -8,7 +8,7 @@ export const connectDB = async () => {
 
     winstonLogger.info("MongoDB Connected Successfully");
   } catch (error) {
-    console.log("Error connecting to MongoDB", error);
+    winstonLogger.info("Error connecting to MongoDB", error);
     process.exit(1);
   }
 };

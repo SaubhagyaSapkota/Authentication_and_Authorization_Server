@@ -22,6 +22,10 @@ const authSchemaZod = z.object({
     })
     .regex(/[0-9]/, { message: "Password must contain at least one number" }),
 });
+const loginSchemaZod = z.object({
+  email: z.string().email({message: "Invalid Email address."}),
+  password: z.string().min(8, {message: "! Incorrect password."})
+})
 
 const authSchema = new mongoose.Schema({
   name: {
@@ -42,4 +46,4 @@ const authSchema = new mongoose.Schema({
 const Auth = mongoose.model("Auth", authSchema);
 // console.log(Auth)
 // console.log(authSchemaZod)
-export { Auth, authSchemaZod };
+export { Auth, authSchemaZod, loginSchemaZod};

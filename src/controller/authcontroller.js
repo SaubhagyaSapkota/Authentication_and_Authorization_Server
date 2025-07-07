@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { addToBlacklist, isBlacklisted } from "../token/tokenBlacklist.js";
 import { error } from "console";
+import winstonLogger from "../logger/winston.logger.js";
 
 // To see all the register users
 export async function getAllUser(req, res) {
@@ -20,18 +21,6 @@ export async function getAllUser(req, res) {
 export async function userRegister(req, res) {
   const { name, email, password } = req.body;
 
-  // Zod validation
-  const validationResult = authSchemaZod.safeParse({ name, email, password });
-
-  if (!validationResult.success) {
-    const errorMessage = validationResult.error.errors.map(
-      (err) => err.message
-    );
-    return res
-      .status(400)
-      .json({ message: "Registration failed", error: errorMessage });
-  }
-
   const existingUser = await Auth.findOne({ email });
   if (existingUser)
     return res.status(400).json({ message: "User already exists." });
@@ -40,6 +29,7 @@ export async function userRegister(req, res) {
   await Auth.create({ name, email, password: hashedPassword });
 
   res.status(201).json({ message: "User registered successfully." });
+  winstonLogger.info(`New user registered: ${email}`);
 }
 
 // For logging in by checking the hashed password(previous password) and plain password (currently entered password)

@@ -20,6 +20,7 @@ export async function getAllUser(req, res) {
 export async function userRegister(req, res) {
   const { name, email, password } = req.body;
 
+  // Zod validation
   const validationResult = authSchemaZod.safeParse({ name, email, password });
 
   if (!validationResult.success) {

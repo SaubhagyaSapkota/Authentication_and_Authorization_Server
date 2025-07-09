@@ -41,6 +41,18 @@ const authSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  gender:{
+    type: String,
+    require: false,
+  },
+  address:{
+    type: String,
+    require: false
+  },
+  education:{
+    type: String,
+    require: false
+  }
 });
 
 const Auth = mongoose.model("Auth", authSchema);

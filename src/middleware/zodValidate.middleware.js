@@ -1,6 +1,7 @@
 import winstonLogger from "../logger/winston.logger.js";
 
-export const validateRequest = (schema) => (req, res, next) => {
+// Middleware for validating Zod
+export const zodValidateRequest = (schema) => (req, res, next) => {
   try {
     // Zod validation
     const result = schema.safeParse(req.body);

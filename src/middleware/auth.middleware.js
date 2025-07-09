@@ -1,6 +1,10 @@
 import jwt from "jsonwebtoken";
 import { isBlacklisted } from "../token/tokenBlacklist.js";
+import {Auth} from '../models/authModel.js'
+import { console } from "inspector";
 
+
+// Middleware for user authentication
 export async function authenticate(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ message: "Token missing" });
@@ -13,7 +17,9 @@ export async function authenticate(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(decoded)
     const user = await Auth.findById(decoded.id).select("-password");
+    // console.log(user)
     if (!user) throw new Error();
 
     req.user = user; // Attach user to request for use in next middleware or controller

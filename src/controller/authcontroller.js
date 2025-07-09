@@ -9,7 +9,7 @@ import winstonLogger from "../logger/winston.logger.js";
 // To see all the register users
 export async function getAllUser(req, res) {
   try {
-    const users = await Auth.find();
+    const users = await Auth.find().sort({ createdAt: -1 });
     res.status(200).json(users);
   } catch (error) {
     console.error("Error in getAllUser controller", error);
@@ -56,11 +56,40 @@ export async function userlogin(req, res) {
   res.status(200).json({ message: "Login successful", token });
 }
 
-// To authorized the users
+// To authenticate the users
 export async function userProfile(req, res) {
   res.json(req.user);
 }
 
+// To Update user Profile
+export async function userUpdate(req, res) {
+  try {
+    const { gender, address, education } = req.body;
+    if (!gender && !address && !education) {
+      return res
+        .status(400)
+        .json({ message: "At least one field must be provided for update" });
+    }
+    const userUpdate = await Auth.findByIdAndUpdate(
+      req.user._id,
+      { gender, address, education },
+      { new: true }
+    );
+    if (!userUpdate) {
+      return res.status(404).json({ message: "User not Found" });
+    }
+    res.status(200).json({
+      message: "User details has been Updated",
+      user: userUpdate, // Returning the updated user data
+    });
+    winstonLogger.info(`Updated user details ${userUpdate}`);
+  } catch (error) {
+    console.error("Error in userUpdate contoller", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+// To Logout the users
 export async function userLogout(req, res) {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(400).json({ message: "Token missing" });

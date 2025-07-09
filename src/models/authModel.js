@@ -21,11 +21,12 @@ const authSchemaZod = z.object({
       message: "Password must contain at least one lowercase letter",
     })
     .regex(/[0-9]/, { message: "Password must contain at least one number" }),
+  role: z.string(),
 });
 const loginSchemaZod = z.object({
-  email: z.string().email({message: "Invalid Email address."}),
-  password: z.string().min(8, {message: "! Incorrect password."})
-})
+  email: z.string().email({ message: "Invalid Email address." }),
+  password: z.string().min(8, { message: "! Incorrect password." }),
+});
 
 const authSchema = new mongoose.Schema({
   name: {
@@ -41,21 +42,28 @@ const authSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  gender:{
+  role: {
+    type: String,
+    enum: ["user", "admin"],
+    // default: "user",
+    require: true,
+  },
+  gender: {
+    type: String,
+    enum: ["male", "female"],
+    require: false,
+  },
+  address: {
     type: String,
     require: false,
   },
-  address:{
+  education: {
     type: String,
-    require: false
+    require: false,
   },
-  education:{
-    type: String,
-    require: false
-  }
 });
 
 const Auth = mongoose.model("Auth", authSchema);
 // console.log(Auth)
 // console.log(authSchemaZod)
-export { Auth, authSchemaZod, loginSchemaZod};
+export { Auth, authSchemaZod, loginSchemaZod };

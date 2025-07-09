@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import { addToBlacklist, isBlacklisted } from "../token/tokenBlacklist.js";
 import { error } from "console";
 import winstonLogger from "../logger/winston.logger.js";
+import { email } from "zod/v4";
 
 // To see all the register users
 export async function getAllUser(req, res) {
@@ -19,14 +20,14 @@ export async function getAllUser(req, res) {
 
 // For registering the users & to check if the users already exists or not
 export async function userRegister(req, res) {
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
 
   const existingUser = await Auth.findOne({ email });
   if (existingUser)
     return res.status(400).json({ message: "User already exists." });
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  await Auth.create({ name, email, password: hashedPassword });
+  await Auth.create({ name, email, password: hashedPassword, role });
 
   res.status(201).json({ message: "User registered successfully." });
   winstonLogger.info(`New user registered: ${email}`);
@@ -107,9 +108,16 @@ export async function removeUser(req, res) {
     if (!deleteuser) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.status(200).json({ message: "User has been deleted" });
+
+    winstonLogger.info(`User ${_id} deleted by admin ${req.user._id}`);
+    res
+      .status(200)
+      .json({
+        message: "User has been deleted",
+        deleteuser: { _id: deleteuser._id, email: deleteuser.email },
+      });
   } catch (error) {
-    console.error("Error in removeUser controller", error);
+    winstonLogger.error(`Error in removeUser controller, ${error.message}`);
     res.status(500).json({ message: "Internal server error" });
   }
 }

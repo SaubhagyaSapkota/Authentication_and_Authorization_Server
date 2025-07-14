@@ -13,7 +13,7 @@ import { authenticate } from "../middleware/auth.middleware.js";
 import { loginSchemaZod, authSchemaZod } from "../models/authModel.js";
 import { roleAuthenticate } from "../middleware/role.middleware.js";
 import { zodValidateRequest } from "../middleware/zodValidate.middleware.js";
-import fileStorage from "../middleware/multer.middleware.js";
+import upload from "../config/multerConfig.js";
 const route = express.Router();
 
 // routes for each methods

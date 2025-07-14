@@ -90,6 +90,29 @@ export async function userUpdate(req, res) {
   }
 }
 
+// to upload file
+export async function uploadFile(req, res) {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    const fileUrl = `/uploads/${req.file.filename}`;
+
+    res.status(200).json({
+      message: "File uploaded successfully",
+      filePath: fileUrl,
+      file: req.file,
+    });
+
+  } catch (error) {
+    console.error("Upload error:", error);
+    res.status(500).json({
+      message: "File upload failed",
+      error: error.message,
+    });
+  }
+}
 // To Logout the users
 export async function userLogout(req, res) {
   const authHeader = req.headers.authorization;

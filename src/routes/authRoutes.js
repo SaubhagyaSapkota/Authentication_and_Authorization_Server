@@ -4,6 +4,7 @@ import {
   userRegister,
   userlogin,
   userProfile,
+  uploadFile,
   userLogout,
   userUpdate,
   removeUser,
@@ -12,6 +13,7 @@ import { authenticate } from "../middleware/auth.middleware.js";
 import { loginSchemaZod, authSchemaZod } from "../models/authModel.js";
 import { roleAuthenticate } from "../middleware/role.middleware.js";
 import { zodValidateRequest } from "../middleware/zodValidate.middleware.js";
+import fileStorage from "../middleware/multer.middleware.js";
 const route = express.Router();
 
 // routes for each methods
@@ -19,6 +21,7 @@ const route = express.Router();
 route.get("/", getAllUser);
 route.post("/register", zodValidateRequest(authSchemaZod), userRegister);
 route.post("/login", zodValidateRequest(loginSchemaZod), userlogin);
+route.post("/upload",upload.single('profile'), uploadFile)
 
 route.post("/profile", authenticate, userProfile);
 route.put("/profile", authenticate, userUpdate);

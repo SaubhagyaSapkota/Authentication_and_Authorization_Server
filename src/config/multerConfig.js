@@ -14,7 +14,6 @@ const fileStorage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  // Add your file filter logic here if needed
   cb(null, true);
 };
 

@@ -5,7 +5,6 @@ import { connectDB } from "./src/DB/mongoDB.js";
 import winstonLogger from "./src/logger/winston.logger.js";
 import morganMiddleware from "./src/logger/morgan.logger.js";
 
-
 dotenv.config();
 
 const app = express();

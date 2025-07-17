@@ -93,18 +93,22 @@ export async function userUpdate(req, res) {
 // to upload file
 export async function uploadFile(req, res) {
   try {
-    if (!req.file) {
+    if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    const fileUrl = `/uploads/${req.file.filename}`;
+    const filePaths = req.files.map((file) => ({
+      originalName: file.originalname,
+      mimeType: file.mimetype,
+      size: file.size,
+    }));
 
     res.status(200).json({
-      message: "File uploaded successfully",
-      filePath: fileUrl,
-      file: req.file,
+      message: "Files uploaded successfully",
+      files: filePaths,
     });
-
+    // console.log("body:", req.body)
+    // console.log("files:", req.files)
   } catch (error) {
     console.error("Upload error:", error);
     res.status(500).json({
@@ -113,6 +117,7 @@ export async function uploadFile(req, res) {
     });
   }
 }
+
 // To Logout the users
 export async function userLogout(req, res) {
   const authHeader = req.headers.authorization;

@@ -4,7 +4,6 @@ import {
   userRegister,
   userlogin,
   userProfile,
-  uploadFile,
   userLogout,
   userUpdate,
   removeUser,
@@ -14,6 +13,7 @@ import { loginSchemaZod, authSchemaZod } from "../models/authModel.js";
 import { roleAuthenticate } from "../middleware/role.middleware.js";
 import { zodValidateRequest } from "../middleware/zodValidate.middleware.js";
 import createUploadMiddleware from "../middleware/multer.middleware.js";
+import {uploadFile, uploadImages} from "../controller/cloudinary.js"
 const route = express.Router();
 
 // routes for each methods
@@ -26,14 +26,16 @@ const feedbackUpload = createUploadMiddleware({
   allowedTypes: ["image/jpeg", "image/png", "image/jpg", "image/webp"],
   maxFileSize: 10 * 1024 * 1024,
   maxFiles: 10,
+  folder: "feedback_images",
 })
-route.post("/upload-images", feedbackUpload.array("images"), uploadFile)
+route.post("/upload-images", feedbackUpload.array("images"), uploadImages)
 
 const fileUpload = createUploadMiddleware({
   allowedTypes: ["application/pdf"],
   maxFileSize: 20 * 1024 * 1024,
-  maxFiles: 5
-})
+  maxFiles: 5,
+  folder: "pdf_documents",
+});
 route.post("/upload-documents", fileUpload.array("documents"), uploadFile)
 
 route.post("/profile", authenticate, userProfile);

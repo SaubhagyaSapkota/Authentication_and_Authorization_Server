@@ -91,34 +91,38 @@ export async function userUpdate(req, res) {
 }
 
 // to upload file
-export async function uploadFile(req, res) {
-  try {
-    if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ message: "No file uploaded" });
-    }
+// export async function uploadFile(req, res) {
+//   try {
+//     if (!req.files || req.files.length === 0) {
+//       return res.status(400).json({ message: "No file uploaded" });
+//     }
 
-    const filePaths = req.files.map((file) => ({
-      originalName: file.originalname,
-      mimeType: file.mimetype,
-      size: file.size,
-    }));
+//     console.log("Uploaded files:", JSON.stringify(req.files, null, 2));
+//     const filePaths = req.files.map((file) => ({
+//       cloudinaryUrl: file.path,
+//       public_id: file.filename || file.public_id,
+//       mimeType: file.mimetype,
+//       size: file.size,
+//       resource_type: file.resource_type || "auto",
+//     }));
 
-    res.status(200).json({
-      message: "Files uploaded successfully",
-      files: filePaths,
-    });
-    // console.log("body:", req.body)
-    // console.log("files:", req.files)
-  } catch (error) {
-    console.error("Upload error:", error);
-    res.status(500).json({
-      message: "File upload failed",
-      error: error.message,
-    });
-  }
-}
+//     res.status(200).json({
+//       message: "Files uploaded successfully",
+//       files: filePaths,
+//     });
+//     // console.log("body:", req.body)
+//     // console.log("files:", req.files)
+//   } catch (error) {
+//     console.error("Upload error:", error);
+//     res.status(500).json({
+//       message: "File upload failed",
+//       error: error.message,
+//     });
+//   }
+// }
 
 // To Logout the users
+
 export async function userLogout(req, res) {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(400).json({ message: "Token missing" });

@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "bcryptjs": "^3.0.2",
+    "cloudinary": "^1.30.1",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
@@ -8,6 +9,7 @@
     "mongoose": "^8.16.0",
     "morgan": "^1.10.0",
     "multer": "^2.0.1",
+    "multer-storage-cloudinary": "^4.0.0",
     "node": "^22.17.0",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0",
